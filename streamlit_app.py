@@ -97,7 +97,7 @@ elif st.session_state.level == 'kitchen':
 
 # --- LEVEL 3: MONSTER BEGEGNUNG ---
 elif st.session_state.level == 'monster':
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cookie_Monster.jpg/320px-Cookie_Monster.jpg", caption="Das Krümelmonster!")
+    st.image("https://scontent-ber1-1.xx.fbcdn.net/v/t1.6435-9/107968189_3082919061797626_1526527550134192230_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=HAtUpzOklfkQ7kNvwFTU4zH&_nc_oc=Adksa_eXSXC71dPytMddq4ee2jd7MzibxAtVA2vweHvWDeAA28sHgbeHeJo2Ek-opVQ&_nc_zt=23&_nc_ht=scontent-ber1-1.xx&_nc_gid=Kyl_sDN-03dL2fbCSA184g&oh=00_AfggCKhmcVsvBcaEsTRXzPvhl9QMp8nYsP_N9JwEG_Hr5Q&oe=695515C5", caption="Das Krümelmonster!")
     
     st.header("KRÜMELMONSTER!")
     st.info('"Egal, was die Frage ist, die Antwort ist Keks!"')
@@ -150,7 +150,7 @@ elif st.session_state.level == 'game_over_monster':
 # --- ENDE: POLDI FALLE ---
 elif st.session_state.level == 'poldi_trap':
     st.header("🐉 POLDI IST HIER!")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Poldi_the_dragon.jpg/320px-Poldi_the_dragon.jpg", caption="Poldi der Drache")
+    st.image("https://static.wikia.nocookie.net/drachen/images/1/12/162Poldi.JPG/revision/latest?cb=20150513111928&path-prefix=de", caption="Poldi der Drache")
     st.error("Falsche Entscheidung! Poldi hat dich erwischt.")
     st.write("'Ich will dir fressen!'")
     
