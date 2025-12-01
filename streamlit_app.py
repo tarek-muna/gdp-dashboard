@@ -98,7 +98,8 @@ elif st.session_state.level == 'kitchen':
 # --- LEVEL: POLDI FALLE ---
 elif st.session_state.level == 'poldi_trap':
     st.header("🐉 POLDI IST HIER!")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Friedrich_Justin_Bertuch_-_Mythical_creature_dragon_-_WGA2124.jpg/320px-Friedrich_Justin_Bertuch_-_Mythical_creature_dragon_-_WGA2124.jpg")
+    # Neues Bild für Poldi
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Poldi_the_dragon.jpg/320px-Poldi_the_dragon.jpg", caption="Poldi der Drache")
     st.error("Du bist direkt in Poldis Arme gelaufen!")
     st.write("'Ich will dich fressen!'")
     
@@ -108,7 +109,8 @@ elif st.session_state.level == 'poldi_trap':
 
 # --- LEVEL 3: MONSTER ---
 elif st.session_state.level == 'monster':
-    st.image("https://upload.wikimedia.org/wikipedia/en/6/62/Kermit_the_Frog.jpg", caption="Stell dir vor, das ist das Krümelmonster!")
+    # Funktionierendes Bild für das Krümelmonster
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cookie_Monster.jpg/320px-Cookie_Monster.jpg", caption="Das Krümelmonster!")
     
     st.header("KRÜMELMONSTER!")
     st.write("Willst du mir Kekse geben?")
