@@ -19,9 +19,10 @@ def mach_kauderwelsch(text):
     neuer_text = []
     
     for wort in woerter:
-        if random.random() < 0.3:
+        # Wahrscheinlichkeit erhöht, damit man den Effekt besser sieht
+        if random.random() < 0.35:
             neuer_text.append(random.choice(lustige_einschuebe))
-        elif len(wort) > 3 and random.random() < 0.3:
+        elif len(wort) > 3 and random.random() < 0.35:
             mitte = list(wort[1:-1])
             random.shuffle(mitte)
             vermixt = wort[0] + "".join(mitte) + wort[-1]
@@ -72,10 +73,10 @@ with st.sidebar:
         st.session_state.test_status = "running"
         st.session_state.frage_index = 0
         st.session_state.test_score = 0
-        st.experimental_rerun()
+        st.rerun() # Aktualisiert auf st.rerun()
 
     st.markdown("---")
-    st.info("Version 5.2 - Die Test-Edition.")
+    st.info("Version 5.2.1 - Bugfix Edition.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro Max")
@@ -129,7 +130,7 @@ elif st.session_state.test_status == "finished":
         
     if st.button("Zurück zum Radar"):
         st.session_state.test_status = "inactive"
-        st.experimental_rerun()
+        st.rerun() # Aktualisiert auf st.rerun()
 
 else:
     # === NORMALER SCANNER MODUS ===
@@ -276,7 +277,7 @@ else:
         else:
             unsinn_text = mach_kauderwelsch(user_text)
             st.session_state.text_inhalt = unsinn_text
-            st.experimental_rerun()
+            st.rerun() # Aktualisiert auf st.rerun()
 
     lustige_gruende = [
         "Zu viele Vokale an der falschen Stelle.", "Der Text riecht ein bisschen nach Käse.",
