@@ -150,7 +150,7 @@ elif st.session_state.level == 'game_over_monster':
 # --- ENDE: POLDI FALLE ---
 elif st.session_state.level == 'poldi_trap':
     st.header("🐉 POLDI IST HIER!")
-    st.image("https://static.wikia.nocookie.net/drachen/images/1/12/162Poldi.JPG/revision/latest?cb=20150513111928&path-prefix=de", caption="Poldi der Drache")
+    st.image("https://i.pinimg.com/236x/7f/33/03/7f3303b23a63d4733b54a895e7fb803e.jpg", caption="Poldi der Drache")
     st.error("Falsche Entscheidung! Poldi hat dich erwischt.")
     st.write("'Ich will dir fressen!'")
     
