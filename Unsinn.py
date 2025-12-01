@@ -24,11 +24,14 @@ with st.sidebar:
     # NEU: Turbo-Boost für 1000%
     turbo_boost = st.checkbox("🚀 Turbo-Boost aktivieren (bis 1000%)")
     
+    # NEU: KI-Modus (Künstliche Irrsinnigkeit)
+    ki_modus = st.checkbox("🤖 KI-Analyse aktivieren", value=True)
+    
     # Checkbox für Experten-Modus
     experten_modus = st.checkbox("Wissenschaftliche Analyse anzeigen")
     
     st.markdown("---")
-    st.info("Version 4.1 - Fixed GIFs Edition.")
+    st.info("Version 5.0 - Mit A.I. (Absolut Irre) Technologie.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro Max")
@@ -234,6 +237,27 @@ lustige_gruende = [
     "Das verletzt die Gesetze der Thermodynamik."
 ]
 
+# --- KI ANALYSE FUNKTION ---
+def ki_analyse(text):
+    # Die "KI" sucht sich Wörter aus dem Text
+    woerter = text.split()
+    if len(woerter) > 0:
+        wort = random.choice(woerter)
+    else:
+        wort = "Nichts"
+        
+    ki_saetze = [
+        f"Meine neuronalen Netze vibrieren bei dem Wort '{wort}'.",
+        f"Ich habe '{wort}' durch den Quantenbeschleuniger gejagt. Ergebnis: Lila.",
+        f"Die emotionale Dichte von '{wort}' beträgt 42.7 Mega-Lappen.",
+        f"Wenn man '{wort}' rückwärts liest, beschwört man einen Regenwurm.",
+        f"Laut Datenbank 7X-Alpha ist '{wort}' illegal in 3 Galaxien.",
+        f"'{wort}'? Wirklich? Mein Algorithmus weint gerade.",
+        "Ich habe das Internet gefragt. Das Internet sagt: Häh?",
+        "Systemüberlastung durch akute Sinnfreiheit."
+    ]
+    return random.choice(ki_saetze)
+
 if st.button("Auf Unsinn scannen"):
     if user_text.strip() == "":
         st.warning("Du musst erst etwas schreiben, sonst kann ich nichts scannen!")
@@ -286,10 +310,10 @@ if st.button("Auf Unsinn scannen"):
             elif unsinn_level <= 100:
                 st.error("🚨 ALARM! TOTALER BLÖDSINN ERKANNT! 🤯")
                 # NEU: Laughing Minions
-                st.image("https://media.giphy.com/media/Ymm8VNcta4Kmk/giphy.gif")
+                st.image("https://media.giphy.com/media/10JhviFuU2gWD6/giphy.gif")
             elif unsinn_level <= 500:
                 st.error("🔥 EXTREMER UNSINN! Mein Prozessor schmilzt!")
-                st.image("https://media.giphy.com/media/9M5jK4GXmD5o1irGrF/giphy.gif", caption="This is fine.")
+                st.image("https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif", caption="This is fine.")
             else:
                 st.error("🌌 KOSMISCHER BLÖDSINN! (Über 500%)")
                 st.write("Wir haben die Grenze der Realität verlassen.")
@@ -297,7 +321,16 @@ if st.button("Auf Unsinn scannen"):
                 st.snow() # Schnee und Ballons gleichzeitig für das Chaos
                 st.image("https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif", caption="System überlastet!")
 
-        # 4. Experten-Analyse (nur wenn angehakt)
+        # 4. KI-Analyse (NEU)
+        if ki_modus:
+            st.markdown("---")
+            st.subheader("🤖 A.I. (Absolut Irre) Analyse:")
+            with st.spinner("Verbinde mit dem Mutterschiff..."):
+                time.sleep(1.5) # Show-Effekt
+                analyse_text = ki_analyse(user_text)
+                st.info(f"💡 **KI-Erkenntnis:** {analyse_text}")
+
+        # 5. Experten-Analyse (nur wenn angehakt)
         if experten_modus:
             st.markdown("---")
             st.subheader("🔬 Wissenschaftliche Analyse:")
