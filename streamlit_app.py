@@ -76,7 +76,7 @@ elif st.session_state.level == 'level2':
         if st.button(f"Tür 3 {farben[2]}"): 
             set_level('poldi_trap')
 
-# --- NEUES LEVEL: DIE KÜCHE ---
+# --- LEVEL: KÜCHE ---
 elif st.session_state.level == 'kitchen':
     st.header("🍽️ Die Küche")
     st.write("Du stehst in einer alten Küche. Es riecht herrlich!")
@@ -95,53 +95,65 @@ elif st.session_state.level == 'kitchen':
     if st.button("Durch die Hintertür gehen"):
         set_level('monster')
 
-# --- LEVEL: POLDI FALLE ---
-elif st.session_state.level == 'poldi_trap':
-    st.header("🐉 POLDI IST HIER!")
-    # Neues Bild für Poldi
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Poldi_the_dragon.jpg/320px-Poldi_the_dragon.jpg", caption="Poldi der Drache")
-    st.error("Du bist direkt in Poldis Arme gelaufen!")
-    st.write("'Ich will dich fressen!'")
-    
-    if st.button("Nochmal versuchen"):
-        st.session_state.inventory = [] # Inventar leeren
-        set_level('start')
-
-# --- LEVEL 3: MONSTER ---
+# --- LEVEL 3: MONSTER BEGEGNUNG ---
 elif st.session_state.level == 'monster':
-    # Funktionierendes Bild für das Krümelmonster
     st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cookie_Monster.jpg/320px-Cookie_Monster.jpg", caption="Das Krümelmonster!")
     
     st.header("KRÜMELMONSTER!")
+    st.info('"Egal, was die Frage ist, die Antwort ist Keks!"')
+    st.write('"Irgendwo ist immer Kekszeit..."')
     st.write("Willst du mir Kekse geben?")
     
-    # Automatische Option: Wenn man den Kuchen hat
+    # 1. Option: Kuchen geben (Sicherer Sieg)
     if "🎂 Leckerer Kuchen" in st.session_state.inventory:
         st.info("💡 Du hast einen Kuchen im Rucksack!")
         if st.button("🎂 Den Kuchen geben (Sieg)"):
-            st.balloons()
-            st.success("GEWONNEN! Das Monster liebt den Kuchen mehr als Kekse!")
-            st.write("Es lässt dich frei und mampft glücklich den Kuchen.")
-            if st.button("Neues Abenteuer starten"):
-                st.session_state.inventory = []
-                set_level('start')
-            st.stop() # Hier aufhören, damit das Formular unten nicht mehr kommt
+            set_level('win')
 
-    # Normale Eingabe (falls man den Kuchen NICHT gefunden hat)
+    # 2. Option: Text-Eingabe (Risiko)
     with st.form(key='antwort_form'):
         antwort = st.text_input("Deine Antwort (ja/nein):")
         submit_button = st.form_submit_button(label='Antworten')
         
         if submit_button:
-            # Cheat Code existiert immer noch
-            if antwort.lower().strip() == "kuchen":
-                st.success("GEWONNEN! (Du kanntest das Geheimwort!)")
-                st.balloons()
-            elif antwort.lower().strip() == "ja":
-                st.error("Verloren! Es frisst die Kekse... und DICH! 💀")
+            eingabe = antwort.lower().strip()
+            
+            if eingabe == "kuchen":
+                set_level('win') # Geheimwort -> Sieg
+            elif eingabe == "ja":
+                set_level('game_over_monster') # Falsche Antwort -> Gefressen
             else:
-                st.warning("Poldi kommt und frisst dich! 🐉")
+                set_level('poldi_trap') # Andere Antwort -> Poldi
 
-    if st.button("Neustart"):
+# --- ENDE: GEWONNEN ---
+elif st.session_state.level == 'win':
+    st.balloons()
+    st.header("🎉 GEWONNEN!")
+    st.success("Das Monster liebt Kuchen (und das Geheimwort) viel mehr als Kekse!")
+    st.write("Es mampft glücklich vor sich hin und lässt dich frei.")
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/120px-Heart_coraz%C3%B3n.svg.png")
+    
+    if st.button("Neues Abenteuer starten"):
         st.session_state.inventory = []
+        set_level('start')
+
+# --- ENDE: GEFRESSEN VOM MONSTER ---
+elif st.session_state.level == 'game_over_monster':
+    st.header("💀 GAME OVER")
+    st.error("Du hast 'Ja' gesagt...")
+    st.write("Das Monster hat die Kekse gegessen... und weil es immer noch Hunger hatte, auch DICH!")
+    
+    if st.button("Nochmal versuchen"):
+        st.session_state.inventory = []
+        set_level('start')
+
+# --- ENDE: POLDI FALLE ---
+elif st.session_state.level == 'poldi_trap':
+    st.header("🐉 POLDI IST HIER!")
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Poldi_the_dragon.jpg/320px-Poldi_the_dragon.jpg", caption="Poldi der Drache")
+    st.error("Falsche Entscheidung! Poldi hat dich erwischt.")
+    st.write("'Ich will dir fressen!'")
+    
+    if st.button("Nochmal versuchen"):
+        st.session_state.inventory = [] 
         set_level('start')
