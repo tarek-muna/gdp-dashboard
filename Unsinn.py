@@ -73,10 +73,10 @@ with st.sidebar:
         st.session_state.test_status = "running"
         st.session_state.frage_index = 0
         st.session_state.test_score = 0
-        st.rerun() # Aktualisiert auf st.rerun()
+        st.rerun() 
 
     st.markdown("---")
-    st.info("Version 5.2.1 - Bugfix Edition.")
+    st.info("Version 5.2.2 - Kauderwelsch Fix.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro Max")
@@ -130,7 +130,7 @@ elif st.session_state.test_status == "finished":
         
     if st.button("Zurück zum Radar"):
         st.session_state.test_status = "inactive"
-        st.rerun() # Aktualisiert auf st.rerun()
+        st.rerun() 
 
 else:
     # === NORMALER SCANNER MODUS ===
@@ -271,13 +271,15 @@ else:
     st.button(f"🎲 Mir fällt nichts ein - Schreib du mal Unsinn! (1 aus {len(quatsch_beispiele)})", on_click=vorschlag_generieren)
     user_text = st.text_area("Gib hier deinen Satz oder eine Geschichte ein:", key="text_inhalt", height=150)
 
-    if st.button("🔀 In Kauderwelsch übersetzen"):
-        if user_text.strip() == "":
+    # REPARIERT: Kauderwelsch Übersetzer mit Callback
+    def kauderwelsch_callback():
+        text = st.session_state.text_inhalt
+        if text.strip() != "":
+            st.session_state.text_inhalt = mach_kauderwelsch(text)
+
+    if st.button("🔀 In Kauderwelsch übersetzen", on_click=kauderwelsch_callback):
+        if st.session_state.text_inhalt.strip() == "":
             st.warning("Schreib erst was, du Experte!")
-        else:
-            unsinn_text = mach_kauderwelsch(user_text)
-            st.session_state.text_inhalt = unsinn_text
-            st.rerun() # Aktualisiert auf st.rerun()
 
     lustige_gruende = [
         "Zu viele Vokale an der falschen Stelle.", "Der Text riecht ein bisschen nach Käse.",
