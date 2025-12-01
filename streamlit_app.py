@@ -1,151 +1,65 @@
+# Du brauchst dafür keinen Installations-Aufwand.
+# Man kann das z.B. auf share.streamlit.io hochladen.
+
 import streamlit as st
-import pandas as pd
-import math
-from pathlib import Path
+import time
 
-# Set the title and favicon that appear in the Browser's tab bar.
-st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
-)
+st.title("🍪 Das Krümelmonster Abenteuer")
 
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
+# Wir müssen den Zustand (wo bin ich?) speichern
+if 'level' not in st.session_state:
+    st.session_state.level = 'start'
 
-@st.cache_data
-def get_gdp_data():
-    """Grab GDP data from a CSV file.
+def set_level(neues_level):
+    st.session_state.level = neues_level
 
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
-    """
+# --- LEVEL 1: VOR DEM HAUS ---
+if st.session_state.level == 'start':
+    st.write("Du stehst vor einem Haus. 3 Türen liegen vor dir.")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("Tür 1 (Grün) 🟢"):
+            st.session_state.vorgabe = "gruen"
+            set_level('level2')
+    with col2:
+        if st.button("Tür 2 (Rot) 🔴"):
+            st.session_state.vorgabe = "rot"
+            set_level('level2')
+    with col3:
+        if st.button("Tür 3 (Rot) 🔴"):
+            st.session_state.vorgabe = "rot"
+            set_level('level2')
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv(DATA_FILENAME)
+# --- LEVEL 2: IM FLUR ---
+elif st.session_state.level == 'level2':
+    st.write("Du bist drinnen! Die Türen haben sich verändert...")
+    
+    if st.session_state.vorgabe == "gruen":
+        farben = ["🟢", "🟢", "🟢"]
+    else:
+        farben = ["🔴", "🔴", "🟢"]
+        
+    if st.button(f"Tür 1 {farben[0]}"): set_level('monster')
+    if st.button(f"Tür 2 {farben[1]}"): set_level('monster')
+    if st.button(f"Tür 3 {farben[2]}"): set_level('monster')
 
-    MIN_YEAR = 1960
-    MAX_YEAR = 2022
-
-    # The data above has columns like:
-    # - Country Name
-    # - Country Code
-    # - [Stuff I don't care about]
-    # - GDP for 1960
-    # - GDP for 1961
-    # - GDP for 1962
-    # - ...
-    # - GDP for 2022
-    #
-    # ...but I want this instead:
-    # - Country Name
-    # - Country Code
-    # - Year
-    # - GDP
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.melt(
-        ['Country Code'],
-        [str(x) for x in range(MIN_YEAR, MAX_YEAR + 1)],
-        'Year',
-        'GDP',
-    )
-
-    # Convert years from string to integers
-    gdp_df['Year'] = pd.to_numeric(gdp_df['Year'])
-
-    return gdp_df
-
-gdp_df = get_gdp_data()
-
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
-
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
-
-# Add some spacing
-''
-''
-
-min_value = gdp_df['Year'].min()
-max_value = gdp_df['Year'].max()
-
-from_year, to_year = st.slider(
-    'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
-
-countries = gdp_df['Country Code'].unique()
-
-if not len(countries):
-    st.warning("Select at least one country")
-
-selected_countries = st.multiselect(
-    'Which countries would you like to view?',
-    countries,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-
-''
-''
-''
-
-# Filter the data
-filtered_gdp_df = gdp_df[
-    (gdp_df['Country Code'].isin(selected_countries))
-    & (gdp_df['Year'] <= to_year)
-    & (from_year <= gdp_df['Year'])
-]
-
-st.header('GDP over time', divider='gray')
-
-''
-
-st.line_chart(
-    filtered_gdp_df,
-    x='Year',
-    y='GDP',
-    color='Country Code',
-)
-
-''
-''
-
-
-first_year = gdp_df[gdp_df['Year'] == from_year]
-last_year = gdp_df[gdp_df['Year'] == to_year]
-
-st.header(f'GDP in {to_year}', divider='gray')
-
-''
-
-cols = st.columns(4)
-
-for i, country in enumerate(selected_countries):
-    col = cols[i % len(cols)]
-
-    with col:
-        first_gdp = first_year[first_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-        last_gdp = last_year[last_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-
-        if math.isnan(first_gdp):
-            growth = 'n/a'
-            delta_color = 'off'
+# --- LEVEL 3: MONSTER ---
+elif st.session_state.level == 'monster':
+    st.image("https://upload.wikimedia.org/wikipedia/en/6/62/Kermit_the_Frog.jpg", caption="(Stell dir hier das Krümelmonster vor)")
+    st.header("KRÜMELMONSTER!")
+    st.write("Willst du mir Kekse geben?")
+    
+    antwort = st.text_input("Deine Antwort:")
+    
+    if st.button("Antworten"):
+        if antwort.lower().strip() == "kuchen":
+            st.success("GEWONNEN! Kuchen ist super!")
+        elif antwort.lower().strip() == "ja":
+            st.error("Verloren! Es frisst die Kekse und DICH!")
         else:
-            growth = f'{last_gdp / first_gdp:,.2f}x'
-            delta_color = 'normal'
+            st.warning("Poldi kommt und frisst dich!")
 
-        st.metric(
-            label=f'{country} GDP',
-            value=f'{last_gdp:,.0f}B',
-            delta=growth,
-            delta_color=delta_color
-        )
+    if st.button("Neustart"):
+        set_level('start')
