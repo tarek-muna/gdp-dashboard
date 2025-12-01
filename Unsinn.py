@@ -9,9 +9,33 @@ st.set_page_config(
     layout="centered"
 )
 
+# --- FUNKTION: KAUDERWELSCH ÜBERSETZER ---
+def mach_kauderwelsch(text):
+    woerter = text.split()
+    if not woerter:
+        return "Nichts da zum Verwursten!"
+    
+    lustige_einschuebe = ["Schnitzel", "Pups", "Blubb", "Knödel", "Glitzer", "Moppelkotze", "Hmpf"]
+    neuer_text = []
+    
+    for wort in woerter:
+        # 30% Chance, dass das Wort durch Quatsch ersetzt wird
+        if random.random() < 0.3:
+            neuer_text.append(random.choice(lustige_einschuebe))
+        # 30% Chance, dass die Buchstaben im Wort geschüttelt werden (außer Anfang/Ende)
+        elif len(wort) > 3 and random.random() < 0.3:
+            mitte = list(wort[1:-1])
+            random.shuffle(mitte)
+            vermixt = wort[0] + "".join(mitte) + wort[-1]
+            neuer_text.append(vermixt)
+        else:
+            neuer_text.append(wort)
+            
+    return " ".join(neuer_text)
+
 # --- SEITENLEISTE (EINSTELLUNGEN) ---
 with st.sidebar:
-    # NEU: Ein Roboter GIF (Funktionierender Link)
+    # Roboter GIF
     st.image("https://media.giphy.com/media/QvBoMEcQ7DQXK/giphy.gif", caption="Scanner aktiv")
     
     st.header("⚙️ Einstellungen")
@@ -19,32 +43,33 @@ with st.sidebar:
     
     # Ein Schieberegler für die "Strenge"
     strenge = st.slider("Empfindlichkeit", 0, 100, 50)
-    st.caption("0 = Alles ist sinnvoll | 100 = Alles ist Quatsch")
     
-    # NEU: Turbo-Boost für 1000%
+    # NEU: Turbo-Boost
     turbo_boost = st.checkbox("🚀 Turbo-Boost aktivieren (bis 1000%)")
     
-    # NEU: KI-Modus (Künstliche Irrsinnigkeit)
+    # NEU: KI-Modus
     ki_modus = st.checkbox("🤖 KI-Analyse aktivieren", value=True)
+    
+    # NEU: Sound-Effekte (Visuell)
+    sound_modus = st.checkbox("🔊 Sound-Effekte (Visuell)", value=True)
     
     # Checkbox für Experten-Modus
     experten_modus = st.checkbox("Wissenschaftliche Analyse anzeigen")
     
     st.markdown("---")
-    st.info("Version 5.0 - Mit A.I. (Absolut Irre) Technologie.")
+    st.info("Version 5.1 - Die 'Alles Drin' Edition.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro Max")
-# NEU: Großes Radar-Bild oben (Funktionierender Link)
+# Großes Radar-Bild oben
 st.image("https://media.giphy.com/media/l0HlJ7aAQyvjxM6B2/giphy.gif", use_column_width=True)
 st.write("Dieses Hochtechnologie-Gerät prüft wissenschaftlich genau, ob dein Text schlau ist oder totaler Quatsch.")
 
 # --- GENERATOR FÜR 1001 SÄTZE ---
-# Wir nutzen session_state, um den Text im Feld zu speichern
 if "text_inhalt" not in st.session_state:
     st.session_state.text_inhalt = ""
 
-# 1. Die handgeschriebenen "Premium"-Sätze (die besten ~100)
+# 1. Die handgeschriebenen "Premium"-Sätze
 premium_quatsch = [
     "Nachts ist es kälter als draußen, weil die Häuser im Freien stehen.",
     "Mein Goldfisch spielt Klavier, aber nur unter Wasser.",
@@ -176,25 +201,20 @@ endungen = [
     "mit Käse überbacken.", "im Livestream."
 ]
 
-# Wir generieren Kombinationen, bis wir genug haben
+# Wir generieren Kombinationen
 generierte_liste = []
 for s in subjekte:
     for v in verben:
         for o in objekte:
             for e in endungen:
-                # Einen Satz bauen
                 satz = f"{s} {v} {o} {e}"
                 generierte_liste.append(satz)
 
-# Mischen für Abwechslung
 random.shuffle(generierte_liste)
-
-# Die Liste zusammenbauen: Premium Sätze + so viele generierte wie nötig
-# Wir schneiden bei 1001 ab
 quatsch_beispiele = premium_quatsch + generierte_liste
 quatsch_beispiele = quatsch_beispiele[:1001]
 
-# --- NEU: UNSINN DES TAGES BUTTON ---
+# --- UNSINN DES TAGES BUTTON ---
 if st.button("📅 Unsinn des Tages anzeigen"):
     tages_unsinn = random.choice(quatsch_beispiele)
     st.success(f"### 🌟 Weisheit des Tages:\n\n> *{tages_unsinn}*")
@@ -209,7 +229,16 @@ st.button(f"🎲 Mir fällt nichts ein - Schreib du mal Unsinn! (1 aus {len(quat
 # Eingabefeld (verknüpft mit session_state)
 user_text = st.text_area("Gib hier deinen Satz oder eine Geschichte ein:", key="text_inhalt", height=150)
 
-# Liste mit lustigen "Gründen" für die Analyse (Massiv erweitert)
+# NEU: Kauderwelsch-Knopf
+if st.button("🔀 In Kauderwelsch übersetzen"):
+    if user_text.strip() == "":
+        st.warning("Schreib erst was, du Experte!")
+    else:
+        unsinn_text = mach_kauderwelsch(user_text)
+        st.session_state.text_inhalt = unsinn_text # Textfeld aktualisieren
+        st.experimental_rerun() # Seite neu laden, um neuen Text anzuzeigen
+
+# Liste mit lustigen "Gründen"
 lustige_gruende = [
     "Zu viele Vokale an der falschen Stelle.",
     "Der Text riecht ein bisschen nach Käse.",
@@ -239,7 +268,6 @@ lustige_gruende = [
 
 # --- KI ANALYSE FUNKTION ---
 def ki_analyse(text):
-    # Die "KI" sucht sich Wörter aus dem Text
     woerter = text.split()
     if len(woerter) > 0:
         wort = random.choice(woerter)
@@ -266,16 +294,19 @@ if st.button("Auf Unsinn scannen"):
         progress_text = "Kalibriere Quatsch-Sensoren..."
         my_bar = st.progress(0, text=progress_text)
 
+        # NEU: Sound-Effekte beim Laden
+        if sound_modus:
+            st.toast("🔊 *Trommelwirbel...*")
+
         for percent_complete in range(100):
-            time.sleep(0.005) # Schnellerer Scan für Profis
-            # Text im Ladebalken ändern
+            time.sleep(0.005) 
             if percent_complete == 20: progress_text = "Analysiere Buchstaben..."
             if percent_complete == 40: progress_text = "Berechne Sinnlosigkeit..."
             if percent_complete == 60: progress_text = "Frage das Orakel..."
             if percent_complete == 80: progress_text = "Lade Blödsinn hoch..."
             my_bar.progress(percent_complete + 1, text=progress_text)
         
-        my_bar.empty() # Balken ausblenden, wenn fertig
+        my_bar.empty()
 
         # 2. Unsinn-Wert berechnen
         zufall = random.randint(0, 100)
@@ -283,7 +314,7 @@ if st.button("Auf Unsinn scannen"):
         
         # TURBO BOOST LOGIK
         if turbo_boost:
-            multiplikator = random.randint(2, 10) # Mal 2 bis Mal 10
+            multiplikator = random.randint(2, 10)
             unsinn_level = unsinn_level * multiplikator
             
         # 3. Ergebnis anzeigen
@@ -297,20 +328,18 @@ if st.button("Auf Unsinn scannen"):
         with col2:
             if unsinn_level < 20:
                 st.success("✅ Dieser Text ergibt absolut Sinn! (Langweilig...)")
-                # NEU: Smart Guy Meme
                 st.image("https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif") 
+                if sound_modus: st.toast("🔊 *Gähn* (Langweilig)")
             elif unsinn_level < 50:
                 st.info("🤔 Ein bisschen Quatsch ist dabei, aber okay.")
-                # NEU: Thinking GIF
                 st.image("https://media.giphy.com/media/xT5LMzIK1AdZJ4cYW4/giphy.gif")
             elif unsinn_level < 80:
                 st.warning("⚠️ Vorsicht! Der Unsinn-Pegel ist kritisch!")
-                # NEU: Confused GIF
                 st.image("https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif")
             elif unsinn_level <= 100:
                 st.error("🚨 ALARM! TOTALER BLÖDSINN ERKANNT! 🤯")
-                # NEU: Laughing Minions
                 st.image("https://media.giphy.com/media/10JhviFuU2gWD6/giphy.gif")
+                if sound_modus: st.toast("🔊 *TRÖÖÖÖT!* ALARM!")
             elif unsinn_level <= 500:
                 st.error("🔥 EXTREMER UNSINN! Mein Prozessor schmilzt!")
                 st.image("https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif", caption="This is fine.")
@@ -318,29 +347,45 @@ if st.button("Auf Unsinn scannen"):
                 st.error("🌌 KOSMISCHER BLÖDSINN! (Über 500%)")
                 st.write("Wir haben die Grenze der Realität verlassen.")
                 st.balloons()
-                st.snow() # Schnee und Ballons gleichzeitig für das Chaos
+                st.snow()
                 st.image("https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif", caption="System überlastet!")
+                if sound_modus: st.toast("🔊 *Explosionsgeräusche* 💥")
 
-        # 4. KI-Analyse (NEU)
+        # NEU: Die offizielle Urkunde (wenn über 100%)
+        if unsinn_level > 100:
+            st.markdown("---")
+            st.markdown(f"""
+            <div style="border: 5px double gold; padding: 20px; text-align: center; background-color: #fff8dc; color: black; border-radius: 10px;">
+                <h1>🎓 O F F I Z I E L L E   U R K U N D E 🎓</h1>
+                <p style="font-size: 18px;">Hiermit wird feierlich und amtlich bestätigt, dass der eingegebene Text</p>
+                <h2 style="color: red; font-size: 40px; font-family: 'Comic Sans MS', cursive;">TOTALER QUATSCH</h2>
+                <p style="font-size: 18px;">ist.</p>
+                <p><b>Gemessener Unsinn-Level: {unsinn_level}%</b></p>
+                <br>
+                <p>Unterschrift:</p>
+                <p style="font-family: 'Brush Script MT', cursive; font-size: 24px;">Dr. Prof. Unsinn</p>
+                <p><i>(Institut für angewandten Blödsinn)</i></p>
+            </div>
+            """, unsafe_allow_html=True)
+            if sound_modus: st.toast("📜 Urkunde ausgedruckt!")
+
+        # 4. KI-Analyse
         if ki_modus:
             st.markdown("---")
             st.subheader("🤖 A.I. (Absolut Irre) Analyse:")
             with st.spinner("Verbinde mit dem Mutterschiff..."):
-                time.sleep(1.5) # Show-Effekt
+                time.sleep(1.0)
                 analyse_text = ki_analyse(user_text)
                 st.info(f"💡 **KI-Erkenntnis:** {analyse_text}")
 
-        # 5. Experten-Analyse (nur wenn angehakt)
+        # 5. Experten-Analyse
         if experten_modus:
             st.markdown("---")
             st.subheader("🔬 Wissenschaftliche Analyse:")
-            # Wir wählen jetzt bis zu 5 zufällige Gründe aus der erweiterten Liste
             anzahl_gruende = random.randint(3, 5)
             gruende = random.sample(lustige_gruende, anzahl_gruende)
-            
             for grund in gruende:
                 st.write(f"❌ {grund}")
 
-# Fußzeile (Der freche Endsatz)
 st.markdown("---")
 st.caption("Der Unsinn-Radar 3000 Pro Max. Du Lappen.")
