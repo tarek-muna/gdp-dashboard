@@ -22,14 +22,35 @@ with st.sidebar:
     experten_modus = st.checkbox("Wissenschaftliche Analyse anzeigen")
     
     st.markdown("---")
-    st.info("Version 2.0 - Jetzt mit KI (Keine Intelligenz)")
+    st.info("Version 2.1 - Jetzt noch frecher.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro")
 st.write("Dieses Hochtechnologie-Gerät prüft wissenschaftlich genau, ob dein Text schlau ist oder totaler Quatsch.")
 
-# Eingabefeld
-user_text = st.text_area("Gib hier deinen Satz oder eine Geschichte ein:", height=150)
+# --- NEU: ZUFALLS-VORSCHLÄGE ---
+# Wir nutzen session_state, um den Text im Feld zu speichern
+if "text_inhalt" not in st.session_state:
+    st.session_state.text_inhalt = ""
+
+# Liste mit Quatsch-Sätzen
+quatsch_beispiele = [
+    "Nachts ist es kälter als draußen, weil die Häuser im Freien stehen.",
+    "Mein Goldfisch spielt Klavier, aber nur unter Wasser.",
+    "Wenn Fliegen hinter Fliegen fliegen, fliegen Fliegen Fliegen nach.",
+    "Bananen sind krumm, weil niemand in den Urwald zog und die Banane gerade bog.",
+    "Ich habe meinen Joghurt fallen lassen, jetzt ist er müde.",
+    "Mein Luftkissenfahrzeug ist voller Aale."
+]
+
+def vorschlag_generieren():
+    st.session_state.text_inhalt = random.choice(quatsch_beispiele)
+
+# Der Knopf für Vorschläge
+st.button("🎲 Mir fällt nichts ein - Schreib du mal Unsinn!", on_click=vorschlag_generieren)
+
+# Eingabefeld (verknüpft mit session_state)
+user_text = st.text_area("Gib hier deinen Satz oder eine Geschichte ein:", key="text_inhalt", height=150)
 
 # Liste mit lustigen "Gründen" für die Analyse
 lustige_gruende = [
@@ -100,6 +121,6 @@ if st.button("Auf Unsinn scannen"):
             for grund in gruende:
                 st.write(f"❌ {grund}")
 
-# Fußzeile
+# Fußzeile (Der freche Endsatz)
 st.markdown("---")
-st.caption("Der Unsinn-Radar 3000 Pro - Jetzt noch bunter.")
+st.caption("Der Unsinn-Radar 3000 Pro. Du Lappen.")
