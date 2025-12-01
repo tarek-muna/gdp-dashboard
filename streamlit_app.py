@@ -1,21 +1,38 @@
-# Du brauchst dafür keinen Installations-Aufwand.
-# Man kann das z.B. auf share.streamlit.io hochladen.
-
 import streamlit as st
 import time
 
-st.title("🍪 Das Krümelmonster Abenteuer")
+# Konfiguration für mobile Geräte
+st.set_page_config(
+    page_title="Krümel-Abenteuer Deluxe",
+    page_icon="🍪",
+    layout="centered"
+)
 
-# Wir müssen den Zustand (wo bin ich?) speichern
+st.title("🍪 Das Krümelmonster Abenteuer XL")
+
+# --- ZUSTAND SPEICHERN ---
 if 'level' not in st.session_state:
     st.session_state.level = 'start'
+# NEU: Ein Inventar (Rucksack)
+if 'inventory' not in st.session_state:
+    st.session_state.inventory = []
 
 def set_level(neues_level):
     st.session_state.level = neues_level
+    st.rerun()
+
+# --- SEITENLEISTE (RUCKSACK) ---
+with st.sidebar:
+    st.header("🎒 Dein Rucksack")
+    if len(st.session_state.inventory) == 0:
+        st.write("Leer")
+    else:
+        for item in st.session_state.inventory:
+            st.write(f"- {item}")
 
 # --- LEVEL 1: VOR DEM HAUS ---
 if st.session_state.level == 'start':
-    st.write("Du stehst vor einem Haus. 3 Türen liegen vor dir.")
+    st.write("Du stehst vor einem gruseligen Haus. 3 Türen liegen vor dir.")
     
     col1, col2, col3 = st.columns(3)
     
@@ -32,34 +49,97 @@ if st.session_state.level == 'start':
             st.session_state.vorgabe = "rot"
             set_level('level2')
 
-# --- LEVEL 2: IM FLUR ---
+# --- LEVEL 2: IM FLUR (ERWEITERT) ---
 elif st.session_state.level == 'level2':
     st.write("Du bist drinnen! Die Türen haben sich verändert...")
+    st.info("Tipp: Eine dieser Türen führt vielleicht an einen sicheren Ort...")
     
     if st.session_state.vorgabe == "gruen":
         farben = ["🟢", "🟢", "🟢"]
     else:
         farben = ["🔴", "🔴", "🟢"]
         
-    if st.button(f"Tür 1 {farben[0]}"): set_level('monster')
-    if st.button(f"Tür 2 {farben[1]}"): set_level('monster')
-    if st.button(f"Tür 3 {farben[2]}"): set_level('monster')
+    col1, col2, col3 = st.columns(3)
+
+    # Tür 1: Führt zur Küche (NEU!)
+    with col1:
+        if st.button(f"Tür 1 {farben[0]}"): 
+            set_level('kitchen')
+            
+    # Tür 2: Führt direkt zum Monster (Gefahr!)
+    with col2:
+        if st.button(f"Tür 2 {farben[1]}"): 
+            set_level('monster')
+
+    # Tür 3: Führt zu Poldi (Sofort Game Over)
+    with col3:
+        if st.button(f"Tür 3 {farben[2]}"): 
+            set_level('poldi_trap')
+
+# --- NEUES LEVEL: DIE KÜCHE ---
+elif st.session_state.level == 'kitchen':
+    st.header("🍽️ Die Küche")
+    st.write("Du stehst in einer alten Küche. Es riecht herrlich!")
+    
+    if "🎂 Leckerer Kuchen" not in st.session_state.inventory:
+        st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Pound_layer_cake.jpg/320px-Pound_layer_cake.jpg", caption="Ein Kuchen!")
+        if st.button("Kuchen einstecken"):
+            st.session_state.inventory.append("🎂 Leckerer Kuchen")
+            st.success("Du hast den Kuchen eingesteckt!")
+            time.sleep(1)
+            st.rerun()
+    else:
+        st.write("Die Küche ist leer. Du hast den Kuchen schon.")
+        
+    st.write("Es gibt hier nur eine Tür weiter...")
+    if st.button("Durch die Hintertür gehen"):
+        set_level('monster')
+
+# --- LEVEL: POLDI FALLE ---
+elif st.session_state.level == 'poldi_trap':
+    st.header("🐉 POLDI IST HIER!")
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Friedrich_Justin_Bertuch_-_Mythical_creature_dragon_-_WGA2124.jpg/320px-Friedrich_Justin_Bertuch_-_Mythical_creature_dragon_-_WGA2124.jpg")
+    st.error("Du bist direkt in Poldis Arme gelaufen!")
+    st.write("'Ich will dich fressen!'")
+    
+    if st.button("Nochmal versuchen"):
+        st.session_state.inventory = [] # Inventar leeren
+        set_level('start')
 
 # --- LEVEL 3: MONSTER ---
 elif st.session_state.level == 'monster':
-    st.image("https://upload.wikimedia.org/wikipedia/en/6/62/Kermit_the_Frog.jpg", caption="(Stell dir hier das Krümelmonster vor)")
+    st.image("https://upload.wikimedia.org/wikipedia/en/6/62/Kermit_the_Frog.jpg", caption="Stell dir vor, das ist das Krümelmonster!")
+    
     st.header("KRÜMELMONSTER!")
     st.write("Willst du mir Kekse geben?")
     
-    antwort = st.text_input("Deine Antwort:")
-    
-    if st.button("Antworten"):
-        if antwort.lower().strip() == "kuchen":
-            st.success("GEWONNEN! Kuchen ist super!")
-        elif antwort.lower().strip() == "ja":
-            st.error("Verloren! Es frisst die Kekse und DICH!")
-        else:
-            st.warning("Poldi kommt und frisst dich!")
+    # Automatische Option: Wenn man den Kuchen hat
+    if "🎂 Leckerer Kuchen" in st.session_state.inventory:
+        st.info("💡 Du hast einen Kuchen im Rucksack!")
+        if st.button("🎂 Den Kuchen geben (Sieg)"):
+            st.balloons()
+            st.success("GEWONNEN! Das Monster liebt den Kuchen mehr als Kekse!")
+            st.write("Es lässt dich frei und mampft glücklich den Kuchen.")
+            if st.button("Neues Abenteuer starten"):
+                st.session_state.inventory = []
+                set_level('start')
+            st.stop() # Hier aufhören, damit das Formular unten nicht mehr kommt
+
+    # Normale Eingabe (falls man den Kuchen NICHT gefunden hat)
+    with st.form(key='antwort_form'):
+        antwort = st.text_input("Deine Antwort (ja/nein):")
+        submit_button = st.form_submit_button(label='Antworten')
+        
+        if submit_button:
+            # Cheat Code existiert immer noch
+            if antwort.lower().strip() == "kuchen":
+                st.success("GEWONNEN! (Du kanntest das Geheimwort!)")
+                st.balloons()
+            elif antwort.lower().strip() == "ja":
+                st.error("Verloren! Es frisst die Kekse... und DICH! 💀")
+            else:
+                st.warning("Poldi kommt und frisst dich! 🐉")
 
     if st.button("Neustart"):
+        st.session_state.inventory = []
         set_level('start')
