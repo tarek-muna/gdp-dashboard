@@ -11,8 +11,8 @@ st.set_page_config(
 
 # --- SEITENLEISTE (EINSTELLUNGEN) ---
 with st.sidebar:
-    # NEU: Ein Roboter GIF in der Seitenleiste
-    st.image("https://media.giphy.com/media/26AHvvC1c7aR9tQ8U/giphy.gif", caption="Scanner aktiv")
+    # NEU: Ein Roboter GIF (Funktionierender Link)
+    st.image("https://media.giphy.com/media/QvBoMEcQ7DQXK/giphy.gif", caption="Scanner aktiv")
     
     st.header("⚙️ Einstellungen")
     st.write("Konfiguriere den Scanner:")
@@ -28,12 +28,12 @@ with st.sidebar:
     experten_modus = st.checkbox("Wissenschaftliche Analyse anzeigen")
     
     st.markdown("---")
-    st.info("Version 4.0 - Die 'Grafik-Update' Edition.")
+    st.info("Version 4.1 - Fixed GIFs Edition.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro Max")
-# NEU: Großes Radar-Bild oben
-st.image("https://media.giphy.com/media/3o7qE1YN7aQf3olljG/giphy.gif", use_column_width=True)
+# NEU: Großes Radar-Bild oben (Funktionierender Link)
+st.image("https://media.giphy.com/media/l0HlJ7aAQyvjxM6B2/giphy.gif", use_column_width=True)
 st.write("Dieses Hochtechnologie-Gerät prüft wissenschaftlich genau, ob dein Text schlau ist oder totaler Quatsch.")
 
 # --- GENERATOR FÜR 1001 SÄTZE ---
@@ -278,24 +278,24 @@ if st.button("Auf Unsinn scannen"):
             elif unsinn_level < 50:
                 st.info("🤔 Ein bisschen Quatsch ist dabei, aber okay.")
                 # NEU: Thinking GIF
-                st.image("https://media.giphy.com/media/3o7TKSjRrfPHj32nWA/giphy.gif")
+                st.image("https://media.giphy.com/media/xT5LMzIK1AdZJ4cYW4/giphy.gif")
             elif unsinn_level < 80:
                 st.warning("⚠️ Vorsicht! Der Unsinn-Pegel ist kritisch!")
                 # NEU: Confused GIF
-                st.image("https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif")
+                st.image("https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif")
             elif unsinn_level <= 100:
                 st.error("🚨 ALARM! TOTALER BLÖDSINN ERKANNT! 🤯")
                 # NEU: Laughing Minions
-                st.image("https://media.giphy.com/media/10JhviFuU2gWD6/giphy.gif")
+                st.image("https://media.giphy.com/media/Ymm8VNcta4Kmk/giphy.gif")
             elif unsinn_level <= 500:
                 st.error("🔥 EXTREMER UNSINN! Mein Prozessor schmilzt!")
-                st.image("https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif", caption="This is fine.")
+                st.image("https://media.giphy.com/media/9M5jK4GXmD5o1irGrF/giphy.gif", caption="This is fine.")
             else:
                 st.error("🌌 KOSMISCHER BLÖDSINN! (Über 500%)")
                 st.write("Wir haben die Grenze der Realität verlassen.")
                 st.balloons()
                 st.snow() # Schnee und Ballons gleichzeitig für das Chaos
-                st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGZ4eXF4ZXZ4ZXZ4ZXZ4ZXZ4ZXZ4ZXZ4ZXZ4ZXZ4ZXZ4ZXZ4/l0HlCqV9bVuyyGuiA/giphy.gif", caption="System überlastet!")
+                st.image("https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif", caption="System überlastet!")
 
         # 4. Experten-Analyse (nur wenn angehakt)
         if experten_modus:
