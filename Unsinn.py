@@ -11,6 +11,9 @@ st.set_page_config(
 
 # --- SEITENLEISTE (EINSTELLUNGEN) ---
 with st.sidebar:
+    # NEU: Ein Roboter GIF in der Seitenleiste
+    st.image("https://media.giphy.com/media/26AHvvC1c7aR9tQ8U/giphy.gif", caption="Scanner aktiv")
+    
     st.header("⚙️ Einstellungen")
     st.write("Konfiguriere den Scanner:")
     
@@ -25,10 +28,12 @@ with st.sidebar:
     experten_modus = st.checkbox("Wissenschaftliche Analyse anzeigen")
     
     st.markdown("---")
-    st.info("Version 3.3 - Die '1001 Sätze' Edition.")
+    st.info("Version 4.0 - Die 'Grafik-Update' Edition.")
 
 # --- HAUPTBEREICH ---
 st.title("🚨 Der Unsinn-Radar 3000 Pro Max")
+# NEU: Großes Radar-Bild oben
+st.image("https://media.giphy.com/media/3o7qE1YN7aQf3olljG/giphy.gif", use_column_width=True)
 st.write("Dieses Hochtechnologie-Gerät prüft wissenschaftlich genau, ob dein Text schlau ist oder totaler Quatsch.")
 
 # --- GENERATOR FÜR 1001 SÄTZE ---
@@ -268,12 +273,20 @@ if st.button("Auf Unsinn scannen"):
         with col2:
             if unsinn_level < 20:
                 st.success("✅ Dieser Text ergibt absolut Sinn! (Langweilig...)")
+                # NEU: Smart Guy Meme
+                st.image("https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif") 
             elif unsinn_level < 50:
                 st.info("🤔 Ein bisschen Quatsch ist dabei, aber okay.")
+                # NEU: Thinking GIF
+                st.image("https://media.giphy.com/media/3o7TKSjRrfPHj32nWA/giphy.gif")
             elif unsinn_level < 80:
                 st.warning("⚠️ Vorsicht! Der Unsinn-Pegel ist kritisch!")
+                # NEU: Confused GIF
+                st.image("https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif")
             elif unsinn_level <= 100:
                 st.error("🚨 ALARM! TOTALER BLÖDSINN ERKANNT! 🤯")
+                # NEU: Laughing Minions
+                st.image("https://media.giphy.com/media/10JhviFuU2gWD6/giphy.gif")
             elif unsinn_level <= 500:
                 st.error("🔥 EXTREMER UNSINN! Mein Prozessor schmilzt!")
                 st.image("https://media.giphy.com/media/NTur7XlVDUdqM/giphy.gif", caption="This is fine.")
