@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-import random # Neu importiert für zufällige Sprüche
+import random 
 
 # Konfiguration für mobile Geräte
 st.set_page_config(
@@ -8,6 +8,10 @@ st.set_page_config(
     page_icon="🍪",
     layout="centered"
 )
+
+# Hilfsfunktion für riesige Emojis
+def riesen_emoji(emoji):
+    st.markdown(f"<div style='text-align: center; font-size: 100px;'>{emoji}</div>", unsafe_allow_html=True)
 
 st.title("🍪 Das Krümelmonster Abenteuer XL")
 
@@ -34,9 +38,10 @@ with st.sidebar:
             
     st.markdown("---")
     
-    # 2. NEU: JASPER DER GEIST
+    # 2. JASPER DER GEIST
     st.header("👻 Jasper")
-    st.image("https://media.giphy.com/media/13pHvYs3p4tQBO/giphy.gif", caption="Dein Geister-Freund")
+    riesen_emoji("👻")
+    st.caption("Dein Geister-Freund")
     
     # Jaspers Tipps basierend auf dem Level
     st.write("**Jasper flüstert:**")
@@ -46,28 +51,40 @@ with st.sidebar:
     if lvl == 'start':
         st.info("'Psst! Ich glaube, die grünen Türen sind freundlicher als die roten.'")
     elif lvl == 'level2':
-        st.info("'Es riecht nach Essen aus einer Richtung... vielleicht gibt es da was Nützliches?'")
+        st.info("'Da ist eine Leiter nach oben... Und eine Tür, hinter der jemand schnarcht?'")
     elif lvl == 'kitchen':
         if "🎂 Leckerer Kuchen" in st.session_state.inventory:
-            st.success("'Lecker! Den Kuchen sollten wir dem Monster bringen!'")
+            st.success("'Ein Geschenk in der Hand öffnet vielleicht Türen...'")
         else:
-            st.warning("'Siehst du den Kuchen? Steck ihn ein, bevor wir gehen!'")
+            st.warning("'Niemals mit leeren Händen zu einem hungrigen Gastgeber gehen!'")
     elif lvl == 'living_room':
-        st.warning("'Sei ganz leise... das Monster ist im nächsten Raum!'")
+        st.info("'Hinter dem Bücherregal zieht es... gibt es da einen geheimen Raum?'")
     elif lvl == 'garden':
-        st.error("'Achtung! Ich spüre Drachen-Atem. Geh nicht hinter den Busch!'")
+        st.error("'Hier ist es neblig. Klettere lieber hoch ins Baumhaus, da ist es sicher!'")
     elif lvl == 'monster':
         if "🎂 Leckerer Kuchen" in st.session_state.inventory:
-            st.success("'Gib ihm den Kuchen! Schnell!'")
+            st.success("'Worte machen nicht satt. Taten (und Gebäck) schon.'")
         else:
-            st.error("'Oh nein! Ohne Kuchen sind wir verloren... Sag bloß nicht JA!'")
+            st.error("'Vorsicht mit dem, was du sagst. Er nimmt alles wörtlich - auch dich!'")
     elif lvl == 'cellar':
-        st.info("'Der linke Tunnel sieht düster aus... Ich würde nach RECHTS gehen.'")
+        st.info("'Im Zweifel ist das Rechte oft das Richtige... Aber links höre ich Stimmen?'")
     elif lvl == 'treasure':
         st.balloons()
-        st.write("'Wir sind reich! Juhu!'")
+        st.write("'Glitzer! Funkel! Wir haben es geschafft!'")
     elif lvl == 'prison':
-        st.write("'Ups... da kann ich uns auch nicht durchwände-glitschen.'")
+        st.error("'Tja... Wände sind leider sehr fest.'")
+    elif lvl == 'attic':
+        st.info("'Pass auf den Kopf auf! Die Rutsche nach draußen sieht lustig aus.'")
+    elif lvl == 'library':
+        st.success("'Bücher sind der Schlüssel zur Weisheit... und manchmal auch zu geheimen Gängen.'")
+    elif lvl == 'treehouse':
+        st.info("'Die Seilbahn ist der schnellste Weg zurück ins Warme!'")
+    elif lvl == 'bedroom':
+        st.warning("'Pst! Nicht das Monster unter dem Bett wecken... Geh lieber ins Kinderzimmer.'")
+    elif lvl == 'kids_room':
+        st.info("'Die Spielzeugkiste sieht verdächtig aus... ob da ein Tunnel drin ist?'")
+    elif lvl == 'dungeon':
+        st.info("'Die beiden kenne ich aus dem Fernsehen! Wir müssen ihnen helfen!'")
     else:
         st.write("'Ich passe auf dich auf!'")
 
@@ -90,7 +107,7 @@ if st.session_state.level == 'start':
             st.session_state.vorgabe = "rot"
             set_level('level2')
 
-# --- LEVEL 2: IM FLUR ---
+# --- LEVEL 2: IM FLUR (ERWEITERT) ---
 elif st.session_state.level == 'level2':
     st.write("Du bist drinnen! Ein langer Flur erstreckt sich vor dir...")
     st.info("Wohin möchtest du gehen?")
@@ -99,22 +116,62 @@ elif st.session_state.level == 'level2':
         farben = ["🟢", "🟢", "🟢"]
     else:
         farben = ["🔴", "🔴", "🟢"]
-        
-    col1, col2, col3 = st.columns(3)
-
-    # Tür 1: Zur Küche
+    
+    col1, col2 = st.columns(2)
     with col1:
-        if st.button(f"Tür 1 (Küche) {farben[0]}"): 
-            set_level('kitchen')
-            
-    # Tür 2: Zum Wohnzimmer
+        if st.button(f"Tür 1 (Küche) {farben[0]}"): set_level('kitchen')
+        if st.button(f"Tür 3 (Garten) {farben[2]}"): set_level('garden')
+        if st.button("🚪 Tür 4 (Schlafzimmer)"): set_level('bedroom')
     with col2:
-        if st.button(f"Tür 2 (Stube) {farben[1]}"): 
-            set_level('living_room')
+        if st.button(f"Tür 2 (Stube) {farben[1]}"): set_level('living_room')
+        if st.button("🪜 Leiter nach oben"): set_level('attic')
 
-    # Tür 3: Zum Garten
-    with col3:
-        if st.button(f"Tür 3 (Garten) {farben[2]}"): 
+# --- LEVEL: SCHLAFZIMMER ---
+elif st.session_state.level == 'bedroom':
+    st.header("🛏️ Das alte Schlafzimmer")
+    st.write("Ein riesiges Himmelbett steht hier. Es staubt gewaltig.")
+    riesen_emoji("🛏️💤")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔙 Zurück zum Flur"):
+            set_level('level2')
+        if st.button("▼ Unters Bett schauen (Keller)"):
+            set_level('cellar')
+    with col2:
+        if st.button("🧸 Tür zum Kinderzimmer"):
+            set_level('kids_room')
+
+# --- LEVEL: KINDERZIMMER ---
+elif st.session_state.level == 'kids_room':
+    st.header("🧸 Das unheimliche Kinderzimmer")
+    st.write("Überall liegen alte Puppen und Bauklötze. Eine Puppe blinzelt dich an...")
+    riesen_emoji("🧸🚂")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔙 Zurück ins Schlafzimmer"):
+            set_level('bedroom')
+        if st.button("🚂 Mit der Eisenbahn spielen (Poldi kommt)"):
+            set_level('poldi_trap')
+    with col2:
+        if st.button("📦 In die Spielzeugkiste klettern"):
+            st.success("Die Kiste hat keinen Boden! Du rutschst in einen Tunnel...")
+            time.sleep(1.5)
+            set_level('library')
+
+# --- LEVEL: DACHBODEN ---
+elif st.session_state.level == 'attic':
+    st.header("🕸️ Der staubige Dachboden")
+    st.write("Hier oben ist es dunkel und voller Spinnweben. Alte Kisten stehen herum.")
+    riesen_emoji("🕷️📦")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🪜 Leiter runter (Flur)"):
+            set_level('level2')
+    with col2:
+        if st.button("🛝 Rutsche in den Garten"):
             set_level('garden')
 
 # --- LEVEL: KÜCHE ---
@@ -123,13 +180,14 @@ elif st.session_state.level == 'kitchen':
     st.write("Es duftet herrlich, aber es ist niemand hier.")
     
     if "🎂 Leckerer Kuchen" not in st.session_state.inventory:
-        st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Pound_layer_cake.jpg/320px-Pound_layer_cake.jpg", caption="Ein Kuchen!")
+        riesen_emoji("🎂")
         if st.button("Kuchen einstecken"):
             st.session_state.inventory.append("🎂 Leckerer Kuchen")
             st.success("Du hast den Kuchen eingesteckt!")
             time.sleep(1)
             st.rerun()
     else:
+        riesen_emoji("🍽️")
         st.write("Die Küche ist leer. Den Kuchen hast du schon.")
         
     st.write("**Deine Optionen:**")
@@ -141,40 +199,75 @@ elif st.session_state.level == 'kitchen':
         if st.button("▼ In den Keller absteigen"):
             set_level('cellar')
 
-# --- NEU: LEVEL WOHNZIMMER ---
+# --- LEVEL WOHNZIMMER ---
 elif st.session_state.level == 'living_room':
     st.header("🛋️ Das Wohnzimmer")
     st.write("Ein gemütliches Sofa steht hier. Aber du hörst ein schweres Atmen aus dem nächsten Raum...")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Living_room_with_fireplace.jpg/320px-Living_room_with_fireplace.jpg")
+    riesen_emoji("🛋️")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     with col1:
         if st.button("⬅️ Zur Küche"):
             set_level('kitchen')
-    with col2:
-        if st.button("🚪 Tür öffnen (Geräusch)"):
+        if st.button("🚪 Zum Monster"):
             set_level('monster')
-    with col3:
+    with col2:
+        if st.button("📚 Alte Holztür öffnen"):
+            set_level('library')
         if st.button("▼ Keller-Luke öffnen"):
             set_level('cellar')
 
-# --- NEU: LEVEL GARTEN ---
+# --- LEVEL: BIBLIOTHEK ---
+elif st.session_state.level == 'library':
+    st.header("📚 Die Bibliothek")
+    st.write("Tausende von Büchern! Jasper scheint diesen Ort zu mögen.")
+    riesen_emoji("📚🕯️")
+    
+    st.info("Ein Buch im Regal sieht locker aus...")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔙 Zurück ins Wohnzimmer"):
+            set_level('living_room')
+    with col2:
+        if st.button("📖 Am Buch ziehen (Geheimgang)"):
+            st.success("Die Wand dreht sich! Ein Geheimgang zur Küche!")
+            time.sleep(1.5)
+            set_level('kitchen')
+
+# --- LEVEL GARTEN ---
 elif st.session_state.level == 'garden':
     st.header("🌳 Der neblige Garten")
     st.write("Draußen ist es kalt und neblig. Hinter einem Busch leuchten zwei Augen...")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Ash_Tree_in_Mist%2C_Whitney_-_geograph.org.uk_-_1068884.jpg/320px-Ash_Tree_in_Mist%2C_Whitney_-_geograph.org.uk_-_1068884.jpg")
+    riesen_emoji("🌳🌫️")
 
     col1, col2 = st.columns(2)
     with col1:
         if st.button("🔎 Hinter den Busch schauen"):
             set_level('poldi_trap')
-    with col2:
-        if st.button("▼ In das Erdloch springen (Keller)"):
+        if st.button("▼ In das Erdloch (Keller)"):
             set_level('cellar')
+    with col2:
+        if st.button("🪜 Ins Baumhaus klettern"):
+            set_level('treehouse')
+
+# --- LEVEL: BAUMHAUS ---
+elif st.session_state.level == 'treehouse':
+    st.header("🏡 Das Baumhaus")
+    st.write("Hier oben bist du sicher vor dem Nebel. Was für eine Aussicht!")
+    riesen_emoji("🔭🏡")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🪜 Runterklettern"):
+            set_level('garden')
+    with col2:
+        if st.button("🪢 Seilbahn ins Wohnzimmer"):
+            set_level('living_room')
 
 # --- LEVEL 3: MONSTER BEGEGNUNG ---
 elif st.session_state.level == 'monster':
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cookie_Monster.jpg/320px-Cookie_Monster.jpg", caption="Das Krümelmonster!")
+    riesen_emoji("👹🍪")
     
     st.header("KRÜMELMONSTER!")
     st.info('"Egal, was die Frage ist, die Antwort ist Keks!"')
@@ -204,7 +297,7 @@ elif st.session_state.level == 'monster':
 # --- LEVEL: POLDI FALLE ---
 elif st.session_state.level == 'poldi_trap':
     st.header("🐉 POLDI IST HIER!")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Poldi_the_dragon.jpg/320px-Poldi_the_dragon.jpg", caption="Poldi der Drache")
+    riesen_emoji("🐉🔥")
     st.error("Du bist Poldi in die Arme gelaufen!")
     st.write("'Ich will dir fressen!'")
     
@@ -215,29 +308,60 @@ elif st.session_state.level == 'poldi_trap':
         st.session_state.inventory = [] 
         set_level('start')
 
-# --- LEVEL KELLER (ERWEITERT) ---
+# --- LEVEL KELLER ---
 elif st.session_state.level == 'cellar':
     st.header("🕸️ Der dunkle Keller")
     st.write("Du bist im Keller gelandet. Es ist dunkel, aber du siehst zwei Tunnel.")
+    riesen_emoji("🔦")
     
     col1, col2 = st.columns(2)
     
     with col1:
         st.warning("Linker Tunnel")
+        # Hier geht es jetzt zu Bert & Ernie statt direkt ins Gefängnis
         if st.button("👈 Nach Links gehen"):
-            set_level('prison')
+            set_level('dungeon')
             
     with col2:
         st.success("Rechter Tunnel")
         if st.button("👉 Nach Rechts gehen"):
             set_level('treasure')
 
-# --- LEVEL GEFÄNGNIS (GAME OVER) ---
+# --- NEU: BERT & ERNIE IM VERLIES ---
+elif st.session_state.level == 'dungeon':
+    st.header("⛓️ Das Verlies")
+    st.write("Du siehst zwei bekannte Gesichter hinter Gittern...")
+    riesen_emoji("😠🦜") # Bert und Ernie (symbolisch)
+    st.write("**Bert:** 'Ernie hat den Drachen geärgert!'")
+    st.write("**Ernie:** 'Ich wollte nur spielen! Hilf uns!'")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔓 Beide befreien"):
+            set_level('win_friends')
+    with col2:
+        if st.button("🤷 Weitergehen (Ignorieren)"):
+            set_level('prison')
+
+# --- NEU: GEWONNEN MIT FREUNDEN ---
+elif st.session_state.level == 'win_friends':
+    st.balloons()
+    st.header("🎉 FREUNDE GERETTET!")
+    riesen_emoji("👯‍♂️🚪")
+    st.success("Du hast Bert und Ernie befreit!")
+    st.write("Ernie quietscht so laut mit seinem Quietscheentchen, dass Poldi erschreckt wegrennt.")
+    st.write("Ihr entkommt zusammen durch einen geheimen Lüftungsschacht.")
+    
+    if st.button("Neues Abenteuer starten"):
+        st.session_state.inventory = []
+        set_level('start')
+
+# --- LEVEL GEFÄNGNIS (GAME OVER MIT POLDI) ---
 elif st.session_state.level == 'prison':
-    st.header("⛓️ GEFÄNGNIS")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Prison_bars.jpg/320px-Prison_bars.jpg", caption="Gefangen!")
-    st.error("Sackgasse! Du bist in einer alten Zelle gelandet.")
-    st.write("**Du hast verloren.**")
+    st.header("⛓️ GEFÄNGNIS... UND POLDI!")
+    riesen_emoji("⛓️🐉") 
+    st.error("Sackgasse! Poldi hat hier auf dich gewartet.")
+    st.subheader("'Ich will dir fressen!'")
     
     if st.button("Neues Abenteuer starten"):
         st.session_state.inventory = []
@@ -247,7 +371,7 @@ elif st.session_state.level == 'prison':
 elif st.session_state.level == 'treasure':
     st.balloons()
     st.header("💎 SCHATZKAMMER!")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Treasure_chest_closed.svg/320px-Treasure_chest_closed.svg.png")
+    riesen_emoji("💎💰")
     st.success("Du hast den geheimen Ausgang gefunden!")
     st.write("Hier liegt ein riesiger Haufen Goldkekse. Du bist reich!")
     
@@ -259,6 +383,7 @@ elif st.session_state.level == 'treasure':
 elif st.session_state.level == 'win':
     st.balloons()
     st.header("🎉 GEWONNEN!")
+    riesen_emoji("💖🎉")
     st.success("Das Monster liebt Kuchen!")
     st.write("Es mampft glücklich vor sich hin und lässt dich frei.")
     
@@ -269,6 +394,7 @@ elif st.session_state.level == 'win':
 # --- ENDE: GEFRESSEN ---
 elif st.session_state.level == 'game_over_monster':
     st.header("💀 GAME OVER")
+    riesen_emoji("💀🍪")
     st.error("Das Monster hat dich gefressen!")
     
     if st.button("Nochmal versuchen"):
